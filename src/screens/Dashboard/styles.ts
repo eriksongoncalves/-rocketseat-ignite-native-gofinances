@@ -14,5 +14,6 @@ export const Title = styled.Text`
     font-size: 24px;
     font-weight: bold;
     color: ${theme.colors.text};
+    font-family: ${theme.fonts.weights.medium};
   `}
 `;
