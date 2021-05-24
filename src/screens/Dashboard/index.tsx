@@ -1,8 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
 
-function Dashboard(){
-  return <Text>Dashboard</Text>
+import * as S from './styles';
+
+function Dashboard() {
+  return (
+    <S.Container>
+      <S.Title>Dashboard</S.Title>
+    </S.Container>
+  );
 }
 
 export default Dashboard;

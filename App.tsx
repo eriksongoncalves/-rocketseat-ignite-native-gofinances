@@ -1,15 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { ThemeProvider } from 'styled-components';
 
-import Dashboard from './src/screens/Dashboard';
+import Dashboard from '@screens/Dashboard';
+import theme from '@styles/theme';
 
 function App() {
   return (
-    <View>
+    <ThemeProvider theme={theme}>
       <Dashboard />
-      <StatusBar style="auto" />
-    </View>
+    </ThemeProvider>
   );
 }
 
