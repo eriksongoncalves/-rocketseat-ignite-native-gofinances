@@ -1,7 +1,13 @@
 import React from 'react';
 
 import * as S from './styles';
-import { HighlightCard } from '../../components';
+import { data } from './mock.json';
+import { HighlightCard, TransactionCard } from '../../components';
+import { TransactionCardProps } from '../../components/TransactionCard';
+
+export type TransactionListProps = {
+  id: string;
+} & TransactionCardProps;
 
 function Dashboard() {
   return (
@@ -50,6 +56,18 @@ function Dashboard() {
           type="total"
         />
       </S.HighlightCards>
+
+      <S.Transactions>
+        <S.Title>Listagem</S.Title>
+
+        <S.TransactionList
+          data={data as TransactionListProps[]}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <TransactionCard {...item} />}
+        />
+
+        {/*  */}
+      </S.Transactions>
     </S.Container>
   );
 }
