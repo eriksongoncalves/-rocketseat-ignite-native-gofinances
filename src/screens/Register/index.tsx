@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as S from './styles';
 
-import { Input } from '../../components';
+import { Button, Input } from '../../components';
 
 function Register() {
   return (
@@ -12,9 +12,13 @@ function Register() {
       </S.Header>
 
       <S.Form>
-        <Input placeholder="Nome" />
+        <S.Fields>
+          <Input placeholder="Nome" />
 
-        <Input placeholder="Preço" />
+          <Input placeholder="Preço" />
+        </S.Fields>
+
+        <Button title="Enviar" />
       </S.Form>
     </S.Container>
   );
