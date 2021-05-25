@@ -8,8 +8,8 @@ import {
   Poppins_700Bold
 } from '@expo-google-fonts/poppins';
 
-import Dashboard from '@screens/Dashboard';
-import theme from '@styles/theme';
+import Dashboard from './src/screens/Dashboard';
+import theme from './src/styles/theme';
 
 function App() {
   const [fontsLoaded] = useFonts({
