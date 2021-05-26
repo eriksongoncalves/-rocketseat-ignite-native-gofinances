@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { BorderlessButton } from 'react-native-gesture-handler';
 
-export const Container = styled(TouchableOpacity).attrs({
+export const Container = styled(BorderlessButton).attrs({
   opacity: 0.7
 })`
   ${({ theme }) => css`
@@ -20,7 +20,7 @@ export const Category = styled.Text`
   ${({ theme }) => css`
     font-size: ${RFValue(14)}px;
     font-family: ${theme.fonts.weights.regular};
-    color: ${theme.colors.text};
+    color: ${theme.colors.text_dark};
   `}
 `;
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { TouchableOpacityProps } from 'react-native';
+import { BorderlessButtonProps } from 'react-native-gesture-handler';
 
 import * as S from './styles';
 
 type CategorySelectButtonProps = {
   title: string;
-} & TouchableOpacityProps;
+} & BorderlessButtonProps;
 
 function CategorySelectButton({ title, ...rest }: CategorySelectButtonProps) {
   return (

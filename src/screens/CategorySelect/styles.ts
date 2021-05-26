@@ -2,8 +2,10 @@ import styled, { css } from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TouchableOpacity } from 'react-native';
+import {
+  GestureHandlerRootView,
+  BorderlessButton
+} from 'react-native-gesture-handler';
 
 type CategoryProps = {
   isActive: boolean;
@@ -35,7 +37,7 @@ export const Title = styled.Text`
   `}
 `;
 
-export const Category = styled(TouchableOpacity)<CategoryProps>`
+export const Category = styled(BorderlessButton)<CategoryProps>`
   ${({ theme, isActive }) => css`
     width: 100%;
     padding: ${RFValue(15)}px;
@@ -45,7 +47,7 @@ export const Category = styled(TouchableOpacity)<CategoryProps>`
 
     ${isActive &&
     css`
-      background-color: ${theme.colors.secondary};
+      background-color: ${theme.colors.secondary_light};
     `}
   `}
 `;

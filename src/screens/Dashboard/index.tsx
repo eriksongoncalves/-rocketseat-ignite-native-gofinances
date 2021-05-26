@@ -26,7 +26,9 @@ function Dashboard() {
             </S.User>
           </S.UserInfo>
 
-          <S.Icon name="power" />
+          <S.LogoutButton>
+            <S.Icon name="power" />
+          </S.LogoutButton>
         </S.UserWrapper>
       </S.Header>
 

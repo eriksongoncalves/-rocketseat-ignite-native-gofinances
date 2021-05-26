@@ -6,6 +6,7 @@ import {
   getStatusBarHeight
 } from 'react-native-iphone-x-helper';
 import { FlatList } from 'react-native';
+import { BorderlessButton } from 'react-native-gesture-handler';
 
 import { TransactionListProps } from './';
 
@@ -67,6 +68,8 @@ export const UserName = styled.Text`
     font-family: ${theme.fonts.weights.bold};
   `}
 `;
+
+export const LogoutButton = styled(BorderlessButton)``;
 
 export const Icon = styled(Feather)`
   ${({ theme }) => css`
