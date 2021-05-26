@@ -1,6 +1,8 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   useFonts,
   Poppins_400Regular,
@@ -8,8 +10,8 @@ import {
   Poppins_700Bold
 } from '@expo-google-fonts/poppins';
 
-import Register from './src/screens/Register';
 import theme from './src/styles/theme';
+import AppRoutes from './src/routes/app.routes';
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -24,7 +26,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Register />
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
     </ThemeProvider>
   );
 }
