@@ -2,6 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { Keyboard, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
+import { useNavigation } from '@react-navigation/native';
 
 import * as S from './styles';
 import { schema } from './schema';
@@ -21,9 +24,11 @@ type FormData = {
 };
 
 function Register() {
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema)
@@ -48,7 +53,7 @@ function Register() {
   }, []);
 
   const handleRegister = useCallback(
-    (data: FormData) => {
+    async (transactionData: FormData) => {
       if (!transactionType) {
         Alert.alert('Selecione o tipo de transação');
         return;
@@ -59,14 +64,37 @@ function Register() {
         return;
       }
 
-      // eslint-disable-next-line no-console
-      console.log({
-        ...data,
-        transactionType,
-        category: category.key
-      });
+      try {
+        const newData = {
+          id: String(uuid.v4()),
+          ...transactionData,
+          transactionType,
+          category: category.key
+        };
+
+        const oldData = await AsyncStorage.getItem('@gofinances:transactions');
+        const currentData = oldData ? JSON.parse(oldData) : [];
+
+        await AsyncStorage.setItem(
+          '@gofinances:transactions',
+          JSON.stringify([newData, ...currentData])
+        );
+
+        reset();
+        setTransactionType(undefined);
+        setCategory({
+          key: 'category',
+          name: 'Categoria'
+        });
+        navigation.navigate('Listagem');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+
+        Alert.alert('Não foi possível salvar os dados');
+      }
     },
-    [category.key, transactionType]
+    [category.key, navigation, reset, transactionType]
   );
 
   return (
