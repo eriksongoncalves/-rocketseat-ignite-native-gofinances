@@ -1,15 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as S from './styles';
-import { data } from './mock.json';
 import { HighlightCard, TransactionCard } from '../../components';
 import { TransactionCardProps } from '../../components/TransactionCard';
+import { useFocusEffect } from '@react-navigation/core';
 
 export type TransactionListProps = {
   id: string;
 } & TransactionCardProps;
 
 function Dashboard() {
+  const [transactions, setTransactions] = useState<TransactionListProps[]>([]);
+
+  async function loadTransactions() {
+    const oldData = await AsyncStorage.getItem('@gofinances:transactions');
+    const data = oldData ? JSON.parse(oldData) : [];
+
+    const transactionsFormatted: TransactionListProps[] = data.map(
+      (item: TransactionListProps) => {
+        const amount = Number(item.amount).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        });
+
+        const date = Intl.DateTimeFormat('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit'
+        }).format(new Date(item.date));
+
+        return {
+          id: item.id,
+          amount,
+          date,
+          category: item.category,
+          title: item.title,
+          type: item.type
+        };
+      }
+    );
+
+    setTransactions(transactionsFormatted);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTransactions();
+    }, [])
+  );
+
+  useEffect(() => {
+    loadTransactions();
+  }, []);
+
   return (
     <S.Container>
       <S.Header>
@@ -63,7 +107,7 @@ function Dashboard() {
         <S.Title>Listagem</S.Title>
 
         <S.TransactionList
-          data={data as TransactionListProps[]}
+          data={transactions}
           keyExtractor={item => item.id}
           renderItem={({ item }) => <TransactionCard {...item} />}
         />

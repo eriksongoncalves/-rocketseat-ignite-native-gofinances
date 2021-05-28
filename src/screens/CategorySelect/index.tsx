@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { FlatList } from 'react-native';
 
 import * as S from './styles';
-import { categories } from './mock.json';
+import { categories } from '../../utils/categories.json';
 import { Button } from '../../components';
 
 type Category = {

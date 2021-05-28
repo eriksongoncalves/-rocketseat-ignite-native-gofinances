@@ -1,15 +1,11 @@
 import React from 'react';
 
 import * as S from './styles';
-
-type Category = {
-  name: string;
-  icon: string;
-};
+import { categories } from '../../utils/categories.json';
 
 export type TransactionCardProps = {
   amount: string;
-  category: Category;
+  category: string;
   date: string;
   title: string;
   type: 'positive' | 'negative';
@@ -22,6 +18,10 @@ function TransactionCard({
   title,
   type
 }: TransactionCardProps) {
+  const [transactionCategory] = categories.filter(
+    item => item.key === category
+  );
+
   return (
     <S.Container>
       <S.Title>{title}</S.Title>
@@ -32,8 +32,8 @@ function TransactionCard({
 
       <S.Footer>
         <S.Category>
-          <S.Icon name={category.icon} />
-          <S.CategoryName>{category.name}</S.CategoryName>
+          <S.Icon name={transactionCategory.icon} />
+          <S.CategoryName>{transactionCategory.name}</S.CategoryName>
         </S.Category>
         <S.Date>{date}</S.Date>
       </S.Footer>

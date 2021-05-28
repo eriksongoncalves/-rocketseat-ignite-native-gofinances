@@ -16,7 +16,7 @@ import {
   CategorySelectButton
 } from '../../components';
 
-type Types = 'up' | 'down';
+type Types = 'positive' | 'negative';
 
 type FormData = {
   name: string;
@@ -67,9 +67,11 @@ function Register() {
       try {
         const newData = {
           id: String(uuid.v4()),
-          ...transactionData,
-          transactionType,
-          category: category.key
+          title: transactionData.name,
+          amount: transactionData.amount,
+          type: transactionType,
+          category: category.key,
+          date: new Date()
         };
 
         const oldData = await AsyncStorage.getItem('@gofinances:transactions');
@@ -127,14 +129,14 @@ function Register() {
               <TransactionTypeButton
                 title="Income"
                 type="up"
-                onPress={() => handleTransactionTypeSelect('up')}
-                isActive={transactionType === 'up'}
+                onPress={() => handleTransactionTypeSelect('positive')}
+                isActive={transactionType === 'positive'}
               />
               <TransactionTypeButton
                 title="Outcome"
                 type="down"
-                onPress={() => handleTransactionTypeSelect('down')}
-                isActive={transactionType === 'down'}
+                onPress={() => handleTransactionTypeSelect('negative')}
+                isActive={transactionType === 'negative'}
               />
             </S.TransactionsTypes>
 
