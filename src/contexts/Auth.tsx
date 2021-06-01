@@ -1,4 +1,10 @@
-import React, { useState, createContext, ReactNode, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  ReactNode,
+  useContext
+} from 'react';
 import * as Google from 'expo-google-app-auth';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,14 +23,29 @@ type User = {
 
 type AuthContextData = {
   user: User;
+  userStorageLoading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext({} as AuthContextData);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User>({} as User);
+  const [userStorageLoading, setUserStorageLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadUserStorageData() {
+      const oldData = await AsyncStorage.getItem('@gofinances:user');
+      const currentData = oldData ? JSON.parse(oldData) : {};
+
+      setUser(currentData);
+      setUserStorageLoading(false);
+    }
+
+    loadUserStorageData();
+  }, []);
 
   async function signInWithGoogle() {
     try {
@@ -64,11 +85,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       });
 
       if (credential) {
+        const name = credential.fullName!.givenName!;
+
         const userLogged = {
           id: String(credential.user),
           email: credential.email!,
-          name: credential.fullName!.givenName!,
-          photo: undefined
+          name,
+          photo: `https://ui-avatars.com/api/?name=${name}`
         };
 
         await AsyncStorage.setItem(
@@ -83,8 +106,25 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
+  async function signOut() {
+    try {
+      await AsyncStorage.removeItem('@gofinances:user');
+      setUser({} as User);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        userStorageLoading,
+        signInWithGoogle,
+        signInWithApple,
+        signOut
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

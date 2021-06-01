@@ -7,6 +7,7 @@ import * as S from './styles';
 import { HighlightCard, TransactionCard } from '../../components';
 import { TransactionCardProps } from '../../components/TransactionCard';
 import theme from '../../styles/theme';
+import { useAuth } from '../../contexts/Auth';
 
 export type TransactionListProps = {
   id: string;
@@ -24,6 +25,7 @@ type HighLightData = {
 };
 
 function Dashboard() {
+  const { user, signOut } = useAuth();
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState<TransactionListProps[]>([]);
   const [highLightData, setHighLightData] = useState<HighLightData>(
@@ -145,16 +147,16 @@ function Dashboard() {
               <S.UserInfo>
                 <S.Photo
                   source={{
-                    uri: 'https://avatars.githubusercontent.com/u/13559274?v=4'
+                    uri: user.photo
                   }}
                 />
                 <S.User>
                   <S.UserGreeting>Olá,</S.UserGreeting>
-                  <S.UserName>Erikson</S.UserName>
+                  <S.UserName>{user.name}</S.UserName>
                 </S.User>
               </S.UserInfo>
 
-              <S.LogoutButton>
+              <S.LogoutButton onPress={signOut}>
                 <S.Icon name="power" />
               </S.LogoutButton>
             </S.UserWrapper>
