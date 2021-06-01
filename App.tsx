@@ -13,6 +13,7 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import theme from './src/styles/theme';
+import { AuthProvider } from './src/contexts/Auth';
 import AppRoutes from './src/routes/app.routes';
 import SignIn from './src/screens/SignIn';
 
@@ -30,7 +31,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        <SignIn />
+        <AuthProvider>
+          <SignIn />
+        </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
   );

@@ -12,7 +12,9 @@
 
 <br />
 
-Na raiz do projeto instale as dependências:
+- Renomeie o arquivo `.env.example` na raiz do projeto para `.env` e altere os valores
+
+- Na raiz do projeto instale as dependências:
 
 ```
   $ yarn install
