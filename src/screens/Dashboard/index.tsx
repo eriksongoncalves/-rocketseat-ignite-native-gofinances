@@ -55,7 +55,9 @@ function Dashboard() {
   }
 
   async function loadTransactions() {
-    const oldData = await AsyncStorage.getItem('@gofinances:transactions');
+    const oldData = await AsyncStorage.getItem(
+      `@gofinances:transactions_user:${user.id}`
+    );
     const data = oldData ? JSON.parse(oldData) : [];
     let entriesTotal = 0;
     let expensiveTotal = 0;

@@ -13,6 +13,7 @@ import { categories } from '../../utils/categories.json';
 import { HistoryCard } from '../../components';
 import { TransactionCardProps } from '../../components/TransactionCard';
 import theme from '../../styles/theme';
+import { useAuth } from '../../contexts/Auth';
 
 export type TransactionListProps = {
   id: string;
@@ -28,6 +29,7 @@ type TotalByCategory = {
 };
 
 function Resume() {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [totalByCategories, setTotalByCategories] = useState<TotalByCategory[]>(
     []
@@ -36,7 +38,9 @@ function Resume() {
   const bottomTabBarHeight = useBottomTabBarHeight();
 
   async function loadTransactions() {
-    const oldData = await AsyncStorage.getItem('@gofinances:transactions');
+    const oldData = await AsyncStorage.getItem(
+      `@gofinances:transactions_user:${user.id}`
+    );
     const data: TransactionListProps[] = oldData ? JSON.parse(oldData) : [];
 
     setLoading(true);

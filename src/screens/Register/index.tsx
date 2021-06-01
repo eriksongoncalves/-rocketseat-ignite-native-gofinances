@@ -15,6 +15,7 @@ import {
   TransactionTypeButton,
   CategorySelectButton
 } from '../../components';
+import { useAuth } from '../../contexts/Auth';
 
 type Types = 'positive' | 'negative';
 
@@ -24,6 +25,7 @@ type FormData = {
 };
 
 function Register() {
+  const { user } = useAuth();
   const navigation = useNavigation();
   const {
     control,
@@ -74,11 +76,13 @@ function Register() {
           date: new Date()
         };
 
-        const oldData = await AsyncStorage.getItem('@gofinances:transactions');
+        const oldData = await AsyncStorage.getItem(
+          `@gofinances:transactions_user:${user.id}`
+        );
         const currentData = oldData ? JSON.parse(oldData) : [];
 
         await AsyncStorage.setItem(
-          '@gofinances:transactions',
+          `@gofinances:transactions_user:${user.id}`,
           JSON.stringify([newData, ...currentData])
         );
 
@@ -96,7 +100,7 @@ function Register() {
         Alert.alert('Não foi possível salvar os dados');
       }
     },
-    [category.key, navigation, reset, transactionType]
+    [category.key, navigation, reset, transactionType, user.id]
   );
 
   return (
