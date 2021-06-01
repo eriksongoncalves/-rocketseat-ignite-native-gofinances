@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/core';
@@ -36,13 +36,17 @@ function Dashboard() {
     data: TransactionListProps[],
     type: 'positive' | 'negative'
   ) {
+    const collectionFiltered = data.filter(item => item.type === type);
+
+    if (collectionFiltered.length === 0) {
+      return 0;
+    }
+
     const lastTransaction = new Date(
       // eslint-disable-next-line prefer-spread
       Math.max.apply(
         Math,
-        data
-          .filter(item => item.type === type)
-          .map(item => new Date(item.date).getTime())
+        collectionFiltered.map(item => new Date(item.date).getTime())
       )
     );
 
@@ -96,7 +100,10 @@ function Dashboard() {
 
     const lastTransactionEntries = getLastTransactionDate(data, 'positive');
     const lastTransactionExpensives = getLastTransactionDate(data, 'negative');
-    const totalInterval = `01 à ${lastTransactionExpensives}`;
+    const totalInterval =
+      lastTransactionExpensives === 0
+        ? 'Não há transações'
+        : `01 à ${lastTransactionExpensives}`;
 
     setHighLightData({
       entries: {
@@ -104,14 +111,20 @@ function Dashboard() {
           style: 'currency',
           currency: 'BRL'
         }),
-        lastTransaction: `Última entrada dia ${lastTransactionEntries}`
+        lastTransaction:
+          lastTransactionEntries === 0
+            ? 'Não há transações'
+            : `Última entrada dia ${lastTransactionEntries}`
       },
       expensive: {
         amount: expensiveTotal.toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL'
         }),
-        lastTransaction: `Última saída dia ${lastTransactionExpensives}`
+        lastTransaction:
+          lastTransactionExpensives === 0
+            ? 'Não há transações'
+            : `Última saída dia ${lastTransactionExpensives}`
       },
       total: {
         amount: (entriesTotal - expensiveTotal).toLocaleString('pt-BR', {
@@ -130,11 +143,6 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
-
-  useEffect(() => {
-    loadTransactions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <S.Container>
