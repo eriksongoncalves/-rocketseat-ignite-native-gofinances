@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GOOGLE_AUTH_ANDROID, GOOGLE_AUTH_IOS } from '@env';
 
 type AuthProviderProps = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 type User = {
@@ -125,7 +125,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signOut
       }}
     >
-      {children}
+      {!!children && children}
     </AuthContext.Provider>
   );
 };
